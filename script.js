@@ -66,11 +66,13 @@ const moodData = {
 let currentMood = null;
 let counter = 0;
 let moodHistory = {}; // 心情历史记录
+let moodMemos = {}; // 留言记录
 
 // 初始化
 document.addEventListener('DOMContentLoaded', function() {
     initMoodSelector();
     initUpdateButton();
+    initMemoInput();
     loadData();
     renderMoodCalendar();
     checkDailyReset();
@@ -91,6 +93,7 @@ function initMoodSelector() {
             // 更新当前心情
             currentMood = this.dataset.mood;
             updateMoodDisplay();
+            loadTodayMemo();
             
             // 记录今天的心情
             recordTodayMood(currentMood);
@@ -99,6 +102,69 @@ function initMoodSelector() {
             createCloud();
         });
     });
+}
+
+// 初始化留言输入框
+function initMemoInput() {
+    const memoInput = document.getElementById('moodMemo');
+    const memoCount = document.getElementById('memoCount');
+    
+    // 实时计数
+    memoInput.addEventListener('input', function() {
+        memoCount.textContent = this.value.length;
+        saveTodayMemo();
+    });
+    
+    // 自动保存
+    memoInput.addEventListener('change', function() {
+        saveTodayMemo();
+        showMemoSaved();
+    });
+}
+
+// 保存今天的留言
+function saveTodayMemo() {
+    const today = new Date().toDateString();
+    const memoInput = document.getElementById('moodMemo');
+    
+    if (!moodMemos[today]) {
+        moodMemos[today] = {};
+    }
+    
+    moodMemos[today].text = memoInput.value;
+    moodMemos[today].mood = currentMood;
+    moodMemos[today].timestamp = new Date().toLocaleTimeString('zh-CN');
+    
+    localStorage.setItem('moodMemos', JSON.stringify(moodMemos));
+}
+
+// 加载今天的留言
+function loadTodayMemo() {
+    const today = new Date().toDateString();
+    const memoInput = document.getElementById('moodMemo');
+    const memoCount = document.getElementById('memoCount');
+    
+    if (moodMemos[today] && moodMemos[today].text) {
+        memoInput.value = moodMemos[today].text;
+        memoCount.textContent = moodMemos[today].text.length;
+        showMemoSaved();
+    } else {
+        memoInput.value = '';
+        memoCount.textContent = 0;
+        document.getElementById('savedMemo').innerHTML = '';
+    }
+}
+
+// 显示已保存提示
+function showMemoSaved() {
+    const today = new Date().toDateString();
+    const savedMemoEl = document.getElementById('savedMemo');
+    
+    if (moodMemos[today] && moodMemos[today].text) {
+        const timestamp = moodMemos[today].timestamp || '';
+        savedMemoEl.innerHTML = `✅ 已保存 ${timestamp}`;
+        savedMemoEl.style.display = 'block';
+    }
 }
 
 // 记录今天的心情
@@ -197,6 +263,7 @@ function loadData() {
     const today = new Date().toDateString();
     const saved = localStorage.getItem(`moodCounter_${today}`);
     const savedHistory = localStorage.getItem('moodHistory');
+    const savedMemos = localStorage.getItem('moodMemos');
     
     if (saved) {
         counter = parseInt(saved);
@@ -207,10 +274,15 @@ function loadData() {
         moodHistory = JSON.parse(savedHistory);
     }
     
+    if (savedMemos) {
+        moodMemos = JSON.parse(savedMemos);
+    }
+    
     // 加载今天的心情
     if (moodHistory[today]) {
         currentMood = moodHistory[today];
         updateMoodDisplay();
+        loadTodayMemo();
         
         // 自动选中今天的心情
         const moodOptions = document.querySelectorAll('.mood-option');
@@ -248,11 +320,12 @@ function renderMoodCalendar() {
         
         if (mood) {
             const moodInfo = moodData[mood];
+            const memo = moodMemos[dateStr] ? '📝' : '';
             dayEl.innerHTML = `
                 <div class="day-emoji" style="background-color: ${moodInfo.color}">
                     ${moodInfo.emoji}
                 </div>
-                <p class="day-label">${dayStr}</p>
+                <p class="day-label">${dayStr} ${memo}</p>
             `;
         } else {
             dayEl.innerHTML = `
@@ -278,6 +351,11 @@ function checkDailyReset() {
         document.getElementById('counter').textContent = 0;
         currentMood = null;
         updateMoodDisplay();
+        
+        // 清空留言框
+        document.getElementById('moodMemo').value = '';
+        document.getElementById('memoCount').textContent = 0;
+        document.getElementById('savedMemo').innerHTML = '';
         
         // 移除所有激活的心情选项
         document.querySelectorAll('.mood-option').forEach(opt => {
