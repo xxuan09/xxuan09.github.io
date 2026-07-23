@@ -48,12 +48,27 @@
                 <div class="mood-display">
                     <p id="selectedMood">选择你的心情...</p>
                 </div>
+
+                <!-- 留言框 -->
+                <div class="memo-section">
+                    <label for="moodMemo">💭 留个言吧</label>
+                    <textarea 
+                        id="moodMemo" 
+                        class="memo-input" 
+                        placeholder="写下你的想法..."
+                        maxlength="100"
+                    ></textarea>
+                    <div class="memo-info">
+                        <span id="memoCount">0</span>/100
+                    </div>
+                    <div id="savedMemo" class="saved-memo"></div>
+                </div>
             </div>
 
             <!-- 右侧计分板和提醒 -->
             <div class="right-panel">
                 <div class="scoreboard">
-                    <h2>等你来更新</h2>
+                    <h2>等你来点亮小房间</h2>
                     <button id="updateBtn" class="update-btn">有人在想你</button>
                     <div class="counter-display">
                         <p>今天有 <span id="counter">0</span> 个人</p>
