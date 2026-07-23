@@ -8,54 +8,63 @@
 </head>
 <body>
     <div class="container">
-        <!-- 左侧心情选择 -->
-        <div class="left-panel">
-            <h1>今天的心情</h1>
-            <div class="mood-selector">
-                <div class="mood-option" data-mood="happy">
-                    <span class="cat-emoji">😸</span>
-                    <p>开心</p>
-                </div>
-                <div class="mood-option" data-mood="sad">
-                    <span class="cat-emoji">😿</span>
-                    <p>难过</p>
-                </div>
-                <div class="mood-option" data-mood="tired">
-                    <span class="cat-emoji">😸</span>
-                    <p>疲惫</p>
-                </div>
-                <div class="mood-option" data-mood="excited">
-                    <span class="cat-emoji">😻</span>
-                    <p>兴奋</p>
-                </div>
-                <div class="mood-option" data-mood="calm">
-                    <span class="cat-emoji">😺</span>
-                    <p>平静</p>
-                </div>
-                <div class="mood-option" data-mood="anxious">
-                    <span class="cat-emoji">😾</span>
-                    <p>焦虑</p>
-                </div>
-            </div>
-            <div class="mood-display">
-                <p id="selectedMood">选择你的心情...</p>
-            </div>
+        <!-- 心情日历 -->
+        <div class="mood-calendar-section">
+            <h2>📅 最近7天的心情</h2>
+            <div id="moodCalendar"></div>
         </div>
 
-        <!-- 右侧计分板和提醒 -->
-        <div class="right-panel">
-            <div class="scoreboard">
-                <h2>等你来更新</h2>
-                <button id="updateBtn" class="update-btn">有人在想你</button>
-                <div class="counter-display">
-                    <p>今天有 <span id="counter">0</span> 个人</p>
-                    <p class="subtitle">一直在认真地想你</p>
+        <!-- 主容器 -->
+        <div class="main-container">
+            <!-- 左侧心情选择 -->
+            <div class="left-panel">
+                <h1>今天的心情</h1>
+                <div class="mood-selector">
+                    <div class="mood-option" data-mood="happy">
+                        <span class="cat-emoji">😸</span>
+                        <p>开心</p>
+                    </div>
+                    <div class="mood-option" data-mood="sad">
+                        <span class="cat-emoji">😿</span>
+                        <p>难过</p>
+                    </div>
+                    <div class="mood-option" data-mood="tired">
+                        <span class="cat-emoji">😸</span>
+                        <p>疲惫</p>
+                    </div>
+                    <div class="mood-option" data-mood="excited">
+                        <span class="cat-emoji">😻</span>
+                        <p>兴奋</p>
+                    </div>
+                    <div class="mood-option" data-mood="calm">
+                        <span class="cat-emoji">😺</span>
+                        <p>平静</p>
+                    </div>
+                    <div class="mood-option" data-mood="anxious">
+                        <span class="cat-emoji">😾</span>
+                        <p>焦虑</p>
+                    </div>
+                </div>
+                <div class="mood-display">
+                    <p id="selectedMood">选择你的心情...</p>
                 </div>
             </div>
 
-            <div class="reminder-box">
-                <h3>来自岱司的提醒</h3>
-                <p id="reminderText">按下按钮，看看有谁在想你</p>
+            <!-- 右侧计分板和提醒 -->
+            <div class="right-panel">
+                <div class="scoreboard">
+                    <h2>等你来更新</h2>
+                    <button id="updateBtn" class="update-btn">有人在想你</button>
+                    <div class="counter-display">
+                        <p>今天有 <span id="counter">0</span> 个人</p>
+                        <p class="subtitle">一直在认真地想你</p>
+                    </div>
+                </div>
+
+                <div class="reminder-box">
+                    <h3>来自岱司的提醒</h3>
+                    <p id="reminderText">按下按钮，看看有谁在想你</p>
+                </div>
             </div>
         </div>
     </div>

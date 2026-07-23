@@ -3,6 +3,7 @@ const moodData = {
     happy: {
         name: '开心',
         emoji: '😸',
+        color: '#FFD700',
         messages: [
             '今天有个人在想你，很开心你也很开心。',
             '嘿，有人今天特别想念你的笑容。',
@@ -12,6 +13,7 @@ const moodData = {
     sad: {
         name: '难过',
         emoji: '😿',
+        color: '#87CEEB',
         messages: [
             '有人默默地在想你，希望你很快就能开心。',
             '嘿，别难过，有人一直陪着你。',
@@ -21,6 +23,7 @@ const moodData = {
     tired: {
         name: '疲惫',
         emoji: '😸',
+        color: '#A9A9A9',
         messages: [
             '有人在想你，希望你能好好休息。',
             '嘿，有人今天一直在想，你有没有好好照顾自己。',
@@ -30,6 +33,7 @@ const moodData = {
     excited: {
         name: '兴奋',
         emoji: '😻',
+        color: '#FF6347',
         messages: [
             '有人被你的热情感染了，也在兴奋地想你。',
             '嘿，有人为了能见到你而期待着。',
@@ -39,6 +43,7 @@ const moodData = {
     calm: {
         name: '平静',
         emoji: '😺',
+        color: '#98FB98',
         messages: [
             '有人在安静的时刻想起了你。',
             '嘿，有人用宁静的心在想你。',
@@ -48,6 +53,7 @@ const moodData = {
     anxious: {
         name: '焦虑',
         emoji: '😾',
+        color: '#DDA0DD',
         messages: [
             '有人在焦虑的时刻想到了你，你会让他们安心。',
             '嘿，有人想，要是能见到你就好了。',
@@ -59,12 +65,15 @@ const moodData = {
 // 当前选中的心情
 let currentMood = null;
 let counter = 0;
+let moodHistory = {}; // 心情历史记录
 
 // 初始化
 document.addEventListener('DOMContentLoaded', function() {
     initMoodSelector();
     initUpdateButton();
-    loadCounter();
+    loadData();
+    renderMoodCalendar();
+    checkDailyReset();
 });
 
 // 初始化心情选择器
@@ -83,10 +92,21 @@ function initMoodSelector() {
             currentMood = this.dataset.mood;
             updateMoodDisplay();
             
+            // 记录今天的心情
+            recordTodayMood(currentMood);
+            
             // 创建云朵
             createCloud();
         });
     });
+}
+
+// 记录今天的心情
+function recordTodayMood(mood) {
+    const today = new Date().toDateString();
+    moodHistory[today] = mood;
+    saveMoodHistory();
+    renderMoodCalendar();
 }
 
 // 更新心情显示
@@ -141,7 +161,8 @@ function updateCounter() {
     counterEl.textContent = counter;
     
     // 保存到本地存储
-    localStorage.setItem('moodCounter', counter);
+    const today = new Date().toDateString();
+    localStorage.setItem(`moodCounter_${today}`, counter);
 }
 
 // 显示随机提醒
@@ -171,16 +192,82 @@ function showReminder() {
     }, 200);
 }
 
-// 加载计数器
-function loadCounter() {
-    const saved = localStorage.getItem('moodCounter');
+// 加载数据
+function loadData() {
+    const today = new Date().toDateString();
+    const saved = localStorage.getItem(`moodCounter_${today}`);
+    const savedHistory = localStorage.getItem('moodHistory');
+    
     if (saved) {
         counter = parseInt(saved);
         document.getElementById('counter').textContent = counter;
     }
+    
+    if (savedHistory) {
+        moodHistory = JSON.parse(savedHistory);
+    }
+    
+    // 加载今天的心情
+    if (moodHistory[today]) {
+        currentMood = moodHistory[today];
+        updateMoodDisplay();
+        
+        // 自动选中今天的心情
+        const moodOptions = document.querySelectorAll('.mood-option');
+        moodOptions.forEach(opt => {
+            if (opt.dataset.mood === currentMood) {
+                opt.classList.add('active');
+            }
+        });
+    }
 }
 
-// 每天重置计数器（可选）
+// 保存心情历史
+function saveMoodHistory() {
+    localStorage.setItem('moodHistory', JSON.stringify(moodHistory));
+}
+
+// 渲染心情日历
+function renderMoodCalendar() {
+    const calendarEl = document.getElementById('moodCalendar');
+    if (!calendarEl) return;
+    
+    calendarEl.innerHTML = '';
+    
+    // 获取最近7天
+    for (let i = 6; i >= 0; i--) {
+        const date = new Date();
+        date.setDate(date.getDate() - i);
+        const dateStr = date.toDateString();
+        const dayStr = date.toLocaleDateString('zh-CN', { month: 'short', day: 'numeric' });
+        
+        const mood = moodHistory[dateStr];
+        
+        const dayEl = document.createElement('div');
+        dayEl.className = 'mood-day';
+        
+        if (mood) {
+            const moodInfo = moodData[mood];
+            dayEl.innerHTML = `
+                <div class="day-emoji" style="background-color: ${moodInfo.color}">
+                    ${moodInfo.emoji}
+                </div>
+                <p class="day-label">${dayStr}</p>
+            `;
+        } else {
+            dayEl.innerHTML = `
+                <div class="day-emoji empty">
+                    ?
+                </div>
+                <p class="day-label">${dayStr}</p>
+            `;
+        }
+        
+        calendarEl.appendChild(dayEl);
+    }
+}
+
+// 每天重置计数器
 function checkDailyReset() {
     const lastDate = localStorage.getItem('lastDate');
     const today = new Date().toDateString();
@@ -188,7 +275,13 @@ function checkDailyReset() {
     if (lastDate !== today) {
         counter = 0;
         localStorage.setItem('lastDate', today);
-        localStorage.setItem('moodCounter', 0);
         document.getElementById('counter').textContent = 0;
+        currentMood = null;
+        updateMoodDisplay();
+        
+        // 移除所有激活的心情选项
+        document.querySelectorAll('.mood-option').forEach(opt => {
+            opt.classList.remove('active');
+        });
     }
 }
