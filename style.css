@@ -1,1 +1,303 @@
-* {\n    margin: 0;\n    padding: 0;\n    box-sizing: border-box;\n}\n\nbody {\n    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;\n    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);\n    min-height: 100vh;\n    padding: 20px;\n}\n\n.container {\n    display: flex;\n    flex-direction: column;\n    gap: 20px;\n    max-width: 1200px;\n    margin: 0 auto;\n}\n\n/* 顶部心情日历 */\n.mood-calendar-section {\n    background: white;\n    border-radius: 20px;\n    padding: 30px;\n    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);\n}\n\n.mood-calendar-section h2 {\n    color: #333;\n    margin-bottom: 20px;\n    font-size: 20px;\n}\n\n#moodCalendar {\n    display: flex;\n    gap: 15px;\n    justify-content: space-between;\n}\n\n.mood-day {\n    text-align: center;\n    flex: 1;\n}\n\n.day-emoji {\n    width: 50px;\n    height: 50px;\n    border-radius: 50%;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    font-size: 24px;\n    margin: 0 auto 8px;\n    transition: transform 0.3s ease;\n}\n\n.day-emoji:hover {\n    transform: scale(1.1);\n}\n\n.day-emoji.empty {\n    background-color: #f0f0f0;\n    color: #999;\n}\n\n.day-label {\n    font-size: 12px;\n    color: #666;\n}\n\n/* 主容器 */\n.main-container {\n    display: flex;\n    gap: 40px;\n}\n\n/* 左侧面板 */\n.left-panel {\n    flex: 1;\n    background: white;\n    border-radius: 20px;\n    padding: 40px;\n    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);\n    display: flex;\n    flex-direction: column;\n    justify-content: center;\n}\n\n.left-panel h1 {\n    color: #333;\n    margin-bottom: 30px;\n    font-size: 28px;\n}\n\n.mood-selector {\n    display: grid;\n    grid-template-columns: repeat(2, 1fr);\n    gap: 15px;\n    margin-bottom: 30px;\n}\n\n.mood-option {\n    background: #f5f5f5;\n    border: 2px solid transparent;\n    border-radius: 15px;\n    padding: 20px;\n    text-align: center;\n    cursor: pointer;\n    transition: all 0.3s ease;\n}\n\n.mood-option:hover {\n    transform: translateY(-5px);\n    background: #efefef;\n    border-color: #667eea;\n}\n\n.mood-option.active {\n    background: #667eea;\n    border-color: #667eea;\n    color: white;\n}\n\n.cat-emoji {\n    font-size: 40px;\n    display: block;\n    margin-bottom: 10px;\n}\n\n.mood-option p {\n    font-size: 16px;\n    font-weight: 500;\n}\n\n.mood-display {\n    text-align: center;\n    padding: 20px;\n    background: #f9f9f9;\n    border-radius: 15px;\n}\n\n.mood-display p {\n    color: #667eea;\n    font-size: 18px;\n    font-weight: 600;\n}\n\n/* 右侧面板 */\n.right-panel {\n    flex: 1;\n    display: flex;\n    flex-direction: column;\n    gap: 30px;\n}\n\n.scoreboard {\n    background: white;\n    border-radius: 20px;\n    padding: 40px;\n    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);\n    text-align: center;\n}\n\n.scoreboard h2 {\n    color: #333;\n    margin-bottom: 30px;\n    font-size: 24px;\n}\n\n.update-btn {\n    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);\n    color: white;\n    border: none;\n    padding: 15px 40px;\n    font-size: 16px;\n    border-radius: 50px;\n    cursor: pointer;\n    transition: all 0.3s ease;\n    font-weight: 600;\n    margin-bottom: 30px;\n}\n\n.update-btn:hover {\n    transform: scale(1.05);\n    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);\n}\n\n.update-btn:active {\n    transform: scale(0.95);\n}\n\n.counter-display {\n    background: #f0f4ff;\n    padding: 25px;\n    border-radius: 15px;\n}\n\n.counter-display p:first-child {\n    font-size: 24px;\n    font-weight: 700;\n    color: #667eea;\n    margin-bottom: 5px;\n}\n\n.counter-display .subtitle {\n    color: #888;\n    font-size: 14px;\n}\n\n.reminder-box {\n    background: white;\n    border-radius: 20px;\n    padding: 30px;\n    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);\n}\n\n.reminder-box h3 {\n    color: #333;\n    margin-bottom: 15px;\n    font-size: 18px;\n}\n\n#reminderText {\n    color: #666;\n    font-size: 16px;\n    line-height: 1.6;\n    min-height: 60px;\n    display: flex;\n    align-items: center;\n    padding: 15px;\n    background: #fff9f0;\n    border-radius: 10px;\n    border-left: 4px solid #ffa500;\n}\n\n/* 云朵动画 */\n.cloud-container {\n    position: fixed;\n    top: 0;\n    left: 0;\n    width: 100%;\n    height: 100%;\n    pointer-events: none;\n    z-index: 100;\n}\n\n.cloud {\n    position: absolute;\n    font-size: 60px;\n    animation: floatUp 4s ease-in forwards;\n}\n\n@keyframes floatUp {\n    0% {\n        opacity: 1;\n        transform: translateY(0) translateX(0) scale(1);\n    }\n    100% {\n        opacity: 0;\n        transform: translateY(-100vh) translateX(50px) scale(0.8);\n    }\n}\n\n/* 响应式设计 */\n@media (max-width: 768px) {\n    .container {\n        flex-direction: column;\n        gap: 20px;\n    }\n\n    .main-container {\n        flex-direction: column;\n        gap: 20px;\n    }\n\n    .mood-selector {\n        grid-template-columns: repeat(3, 1fr);\n    }\n\n    #moodCalendar {\n        gap: 10px;\n    }\n\n    .mood-day {\n        font-size: 12px;\n    }\n\n    .day-emoji {\n        width: 40px;\n        height: 40px;\n        font-size: 20px;\n    }\n\n    .left-panel h1 {\n        font-size: 22px;\n    }\n\n    .cat-emoji {\n        font-size: 32px;\n    }\n}\n
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* 顶部心情日历 */
+.mood-calendar-section {
+    background: white;
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+}
+
+.mood-calendar-section h2 {
+    color: #333;
+    margin-bottom: 20px;
+    font-size: 20px;
+}
+
+#moodCalendar {
+    display: flex;
+    gap: 15px;
+    justify-content: space-between;
+}
+
+.mood-day {
+    text-align: center;
+    flex: 1;
+}
+
+.day-emoji {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    margin: 0 auto 8px;
+    transition: transform 0.3s ease;
+}
+
+.day-emoji:hover {
+    transform: scale(1.1);
+}
+
+.day-emoji.empty {
+    background-color: #f0f0f0;
+    color: #999;
+}
+
+.day-label {
+    font-size: 12px;
+    color: #666;
+}
+
+/* 主容器 */
+.main-container {
+    display: flex;
+    gap: 40px;
+}
+
+/* 左侧面板 */
+.left-panel {
+    flex: 1;
+    background: white;
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.left-panel h1 {
+    color: #333;
+    margin-bottom: 30px;
+    font-size: 28px;
+}
+
+.mood-selector {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.mood-option {
+    background: #f5f5f5;
+    border: 2px solid transparent;
+    border-radius: 15px;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.mood-option:hover {
+    transform: translateY(-5px);
+    background: #efefef;
+    border-color: #667eea;
+}
+
+.mood-option.active {
+    background: #667eea;
+    border-color: #667eea;
+    color: white;
+}
+
+.cat-emoji {
+    font-size: 40px;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.mood-option p {
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.mood-display {
+    text-align: center;
+    padding: 20px;
+    background: #f9f9f9;
+    border-radius: 15px;
+}
+
+.mood-display p {
+    color: #667eea;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+/* 右侧面板 */
+.right-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.scoreboard {
+    background: white;
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+.scoreboard h2 {
+    color: #333;
+    margin-bottom: 30px;
+    font-size: 24px;
+}
+
+.update-btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    padding: 15px 40px;
+    font-size: 16px;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 600;
+    margin-bottom: 30px;
+}
+
+.update-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+}
+
+.update-btn:active {
+    transform: scale(0.95);
+}
+
+.counter-display {
+    background: #f0f4ff;
+    padding: 25px;
+    border-radius: 15px;
+}
+
+.counter-display p:first-child {
+    font-size: 24px;
+    font-weight: 700;
+    color: #667eea;
+    margin-bottom: 5px;
+}
+
+.counter-display .subtitle {
+    color: #888;
+    font-size: 14px;
+}
+
+.reminder-box {
+    background: white;
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+}
+
+.reminder-box h3 {
+    color: #333;
+    margin-bottom: 15px;
+    font-size: 18px;
+}
+
+#reminderText {
+    color: #666;
+    font-size: 16px;
+    line-height: 1.6;
+    min-height: 60px;
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    background: #fff9f0;
+    border-radius: 10px;
+    border-left: 4px solid #ffa500;
+}
+
+/* 云朵动画 */
+.cloud-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 100;
+}
+
+.cloud {
+    position: absolute;
+    font-size: 60px;
+    animation: floatUp 4s ease-in forwards;
+}
+
+@keyframes floatUp {
+    0% {
+        opacity: 1;
+        transform: translateY(0) translateX(0) scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-100vh) translateX(50px) scale(0.8);
+    }
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .main-container {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .mood-selector {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    #moodCalendar {
+        gap: 10px;
+    }
+
+    .mood-day {
+        font-size: 12px;
+    }
+
+    .day-emoji {
+        width: 40px;
+        height: 40px;
+        font-size: 20px;
+    }
+
+    .left-panel h1 {
+        font-size: 22px;
+    }
+
+    .cat-emoji {
+        font-size: 32px;
+    }
+}
